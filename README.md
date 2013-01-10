@@ -2,6 +2,7 @@ xml2json
 ========
 
 A utility for converting C-CDA XML file to a simplified JavaScript object. Requires jQuery.
+[Try the example](http://blue-button.github.com/xml2json/)
 
 ### USAGE
 First, make sure jQuery is loaded. Then load the x2j script:
