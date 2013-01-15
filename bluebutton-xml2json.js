@@ -113,12 +113,17 @@
           var tehCodez = bbx2j.xmlToJson($(this).find('code')[0]);
           var vals = bbx2j.xmlToJson($(this).find('value')[0]);
           var propName;
-          if (tehCodez.nullflavor) {
-            propName = 'reaction';
+          if (typeof tehCodez.displayname !== "undefined") {
+            if (tehCodez.nullflavor) {
+              propName = 'reaction';
+            } else {
+              propName = tehCodez.displayname.toLowerCase().split(" ")[0];
+            }
+            allergy[propName] = bbx2j.camelCasifyCode(vals);
           } else {
-            propName = tehCodez.displayname.toLowerCase().split(" ")[0];
+            if (typeof allergy.otherCodes == "undefined") allergy.otherCodes = [];
+            allergy.otherCodes.push(bbx2j.camelCasifyCode(vals));
           }
-          allergy[propName] = bbx2j.camelCasifyCode(vals);
         });
         friendlyJson.allergies.push(allergy);
       });
