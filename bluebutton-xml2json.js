@@ -191,24 +191,24 @@
       });
 
       // VITAL SIGNS
-      // TODO: don't cheat by using the html section.
-      var vitalsSec = domified.find("templateId[root='2.16.840.1.113883.10.20.22.2.4.1']").siblings('text').children('table');
-      var vitalsCols = vitalsSec.find('thead > tr > th');
-      var vitalsRows = vitalsSec.find('tbody > tr');
+
+      var vitalsSec = domified.find("templateId[root='2.16.840.1.113883.10.20.22.2.4.1']").siblings('entry').children('organizer');
       var vitals = [];
 
-      for (var i=1, j=vitalsCols.length; i<j; i++) {
-        vitals.push({"date": bbx2j.leTrim($(vitalsCols[i]).text())});
-      }
-
-      vitalsRows.each(function() {
-        var propName = bbx2j.camelCasify($(this).children('th').text().toLowerCase());
-        var cols = $(this).children('td');
-        cols.each(function(pos) {
-          vitals[pos][propName] = bbx2j.leTrim($(this).text());
+      vitalsSec.each(function(){
+        var v = {};
+        v.date = $(this).find("effectivetime").attr('value');
+        var objs = $(this).find('component > observation');
+        objs.each(function(){
+          var propName = bbx2j.camelCasify($(this).find('code').attr('displayname').toLowerCase().split("-")[0]);
+          var valNode = $(this).find('value');
+          v[propName] = valNode.attr('value') + " " + valNode.attr('unit');
         });
+        vitals.push(v);
       });
+
       friendlyJson.vitalSigns = vitals;
+
 
       return friendlyJson;
     };
